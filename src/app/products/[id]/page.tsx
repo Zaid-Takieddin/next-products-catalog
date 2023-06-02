@@ -1,5 +1,4 @@
-"use client";
-import { Box } from "@mui/material";
+import ProductPage from "@/UI/ProductPage";
 
 async function getProduct(id: number) {
   try {
@@ -17,5 +16,5 @@ export default async function Product({
 }) {
   const product = await getProduct(id);
 
-  return <Box>page</Box>;
+  return <ProductPage product={product} />;
 }

@@ -1,4 +1,5 @@
 import { Product } from "@/types/Product";
+import DataDisplayer from "@/UI/DataDispalyer";
 import Paginator from "@/utils/Paginator";
 
 async function getProducts() {
@@ -13,5 +14,5 @@ async function getProducts() {
 export default async function Products() {
   const products: Product[] = await getProducts();
 
-  return <Paginator data={products} pageSize={8} />;
+  return <DataDisplayer data={products} />;
 }

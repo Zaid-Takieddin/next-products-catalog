@@ -5,30 +5,42 @@ import { Product } from "@/types/Product";
 import ProductCard from "@/UI/ProductCard";
 import React, { useEffect, useState } from "react";
 
-const Paginator = ({ pageSize, data }: Paginator) => {
+const Paginator = ({ pageSize, data, sort, sortBy }: Paginator) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [dataSnap, setDataSnap] = useState<Product[]>([]);
+  const [sortedData, setSortedData] = useState<Product[]>([]);
 
   const pages = Math.ceil(data.length / pageSize);
+  console.log(sort.length);
 
   useEffect(() => {
-    if (localStorage.getItem("page"))
-      setCurrentPage(Number(localStorage.getItem("page")));
-  }, []);
-
-  useEffect(() => {
-    if (data.length > 0) setDataSnap(data);
-  }, [data]);
+    let storedData;
+    if (!sort) {
+      storedData = data.sort((a: any, b: any) => Number(a.id) - Number(b.id));
+    } else if (sort === "desc") {
+      storedData = data.sort(
+        (a: any, b: any) => Number(b[sortBy]) - Number(a[sortBy])
+      );
+    } else {
+      storedData = data.sort(
+        (a: any, b: any) => Number(a[sortBy]) - Number(b[sortBy])
+      );
+    }
+    setSortedData(storedData);
+  }, [sort, sortBy, data]);
 
   useEffect(() => {
     setDataSnap(() =>
-      data.slice(currentPage * pageSize - pageSize, currentPage * pageSize)
+      sortedData.slice(
+        currentPage * pageSize - pageSize,
+        currentPage * pageSize
+      )
     );
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
-  }, [currentPage]);
+  }, [currentPage, sortedData, sort, sortBy]);
 
   return (
     <>
